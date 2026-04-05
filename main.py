@@ -1,25 +1,29 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def home():
-    return jsonify({
-        "status": "Server je online",
-        "poruka": "Koristi /stream za link"
-    })
-
 @app.route('/stream')
 def get_stream():
-    # TVOJ NOVI SVEŽI LINK KOJI SI IZVUKAO
-    direct_url = "https://vod-content.plexvideos.com/ad-server/69b4ae7be22040599208b5d2/16ee30c1-9e6e-421d-8ede-bb7aadbff84d/21ba66b2376329e2b1e2c697de0615cc.mp4"
+    # Uzimamo TMDB ID koji šalje tvoja aplikacija (npr. ?id=550)
+    tmdb_id = request.args.get('id')
+    
+    if not tmdb_id:
+        # Ako nema ID-ja, vraćamo onaj tvoj Plex test link da aplikacija ne pukne
+        return jsonify({
+            "url": "https://plexvideos.com",
+            "referer": "https://plex.tv"
+        })
+
+    # PAMETNA LOGIKA: Pravimo link za Vidsrc na osnovu ID-ja
+    # Vidsrc je "embed" plejer koji u sebi sadrži filmove
+    vidsrc_url = f"https://vidsrc.to{tmdb_id}"
     
     return jsonify({
-        "url": direct_url,
-        "referer": "https://plex.tv"
+        "url": vidsrc_url,
+        "referer": "https://vidsrc.to"
     })
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
