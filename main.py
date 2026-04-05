@@ -6,22 +6,19 @@ CORS(app)
 
 @app.route('/stream')
 def get_stream():
-    # Uzimamo TMDB ID koji šalje tvoja aplikacija (npr. ?id=550)
+    # Uzimamo ID koji šalje Flutter (npr. 550)
     tmdb_id = request.args.get('id')
-    
-    if not tmdb_id:
-        # Ako nema ID-ja, vraćamo onaj tvoj Plex test link da aplikacija ne pukne
-        return jsonify({
-            "url": "https://plexvideos.com",
-            "referer": "https://plex.tv"
-        })
+    media_type = request.args.get('type', 'movie')
 
-    # PAMETNA LOGIKA: Pravimo link za Vidsrc na osnovu ID-ja
-    # Vidsrc je "embed" plejer koji u sebi sadrži filmove
-    vidsrc_url = f"https://vidsrc.to{tmdb_id}"
+    if not tmdb_id:
+        return jsonify({"error": "Missing ID"}), 400
+
+    # Koristimo stabilan izvor koji ne ističe kao Plex
+    # Ovo je "pametan" link koji HDO Box i slični koriste
+    video_url = f"https://vidsrc.to{media_type}/{tmdb_id}"
     
     return jsonify({
-        "url": vidsrc_url,
+        "url": video_url,
         "referer": "https://vidsrc.to"
     })
 
