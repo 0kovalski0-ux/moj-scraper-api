@@ -4,7 +4,6 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Ovo pokriva glavni link: http://192.168.0
 @app.route('/')
 def home():
     return jsonify({
@@ -12,11 +11,10 @@ def home():
         "poruka": "Koristi /stream za link"
     })
 
-# Ovo pokriva link: http://192.168.0stream
 @app.route('/stream')
 def get_stream():
-    # Link koji si izvukao iz curl komande
-    direct_url = "https://plexvideos.com"
+    # TVOJ NOVI SVEŽI LINK KOJI SI IZVUKAO
+    direct_url = "https://vod-content.plexvideos.com/ad-server/69b4ae7be22040599208b5d2/16ee30c1-9e6e-421d-8ede-bb7aadbff84d/21ba66b2376329e2b1e2c697de0615cc.mp4"
     
     return jsonify({
         "url": direct_url,
@@ -24,5 +22,4 @@ def get_stream():
     })
 
 if __name__ == '__main__':
-    # host='0.0.0.0' omogućava telefonu da vidi server na tvojoj mreži
     app.run(host='0.0.0.0', port=5000, debug=True)
