@@ -41,7 +41,7 @@ def get_stream():
     
     return jsonify({
         "url": video_url,
-        "referer": "https://vidsrc.to"
+        "referer": "https://vidsrc.to/"
     })
 
 if __name__ == '__main__':
