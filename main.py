@@ -19,7 +19,7 @@ def search_movies():
         return jsonify({"error": "Missing query"}), 400
     
     # ISPRAVLJEN TMDB URL (Mora ići preko api.themoviedb.org)
-    url = f"https://themoviedb.org{TMDB_API_KEY}&query={query}"
+    url = f"https://api.themoviedb.org{TMDB_API_KEY}&query={query}"
     
     try:
         response = requests.get(url)
