@@ -24,3 +24,17 @@ def get_stream():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+@app.route('/search')
+def search_movies():
+    query = request.args.get('q')
+    if not query:
+        return jsonify({"error": "Missing query"}), 400
+    
+    # Ovde koristimo TMDB API (trebaće ti tvoj API KEY ako hoćeš prave rezultate)
+    # Za početak, evo kako da vratiš bar neki odgovor da Render ne "vrti"
+    return jsonify({
+        "results": [
+            {"title": "Avatar", "id": "19995"},
+            {"title": "Avatar: The Way of Water", "id": "76600"}
+        ]
+    })
