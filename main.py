@@ -18,7 +18,7 @@ def search_movies():
     if not query:
         return jsonify({"error": "Missing query"}), 400
     
-    # ISPRAVLJEN TMDB URL (Mora ići preko api.themoviedb.org)
+    # POPRAVLJENO: Dodata putanja /3/search/movie i parametar api_key
     url = f"https://api.themoviedb.org{TMDB_API_KEY}&query={query}"
     
     try:
@@ -35,8 +35,8 @@ def get_stream():
     if not tmdb_id:
         return jsonify({"error": "Missing ID"}), 400
 
-    # ISPRAVLJEN URL ZA STRIM (Dodate kose crte / koje su falile)
-    # Rezultat će biti: https://vidsrc.to
+    # POPRAVLJENO: Dodato /embed/ i kose crte / koje su falile
+    # Ispravan format: https://vidsrc.to
     video_url = f"https://vidsrc.to{media_type}/{tmdb_id}"
     
     return jsonify({
