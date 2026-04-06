@@ -1,3 +1,7 @@
+@app.route('/')
+def home():
+    return {"status": "Server je živ i radi!", "poruka": "Koristi /get_movie ili sličnu rutu"}
+
 import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
