@@ -1,28 +1,12 @@
+import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/')
-def home():
-    return "API za filmove je aktivan! Koristi /stream ili /search."
-
-@app.route('/stream')
-def get_stream():
-    tmdb_id = request.args.get('id')
-    media_type = request.args.get('type', 'movie')
-
-    if not tmdb_id:
-        return jsonify({"error": "Missing ID"}), 400
-
-    # ISPRAVLJEN LINK: dodat /embed/ i kosa crta pre media_type
-    video_url = f"https://vidsrc.to{media_type}/{tmdb_id}"
-    
-    return jsonify({
-        "url": video_url,
-        "referer": "https://vidsrc.to"
-    })
+# OVDE STAVI SVOJ KLJUČ SA TMDB SAJTA
+TMDB_API_KEY = "5d377e052d891d6518d185f610d6b8e8"
 
 @app.route('/search')
 def search_movies():
@@ -30,15 +14,18 @@ def search_movies():
     if not query:
         return jsonify({"error": "Missing query"}), 400
     
-    # Ovo je test odgovor dok ne ubaciš TMDB ključ
-    return jsonify({
-        "results": [
-            {"title": "Avatar", "id": "19995"},
-            {"title": "Avatar: The Way of Water", "id": "76600"}
-        ]
-    })
+    # PRAVA PRETRAGA PREKO TMDB-A
+    url = f"https://themoviedb.org{TMDB_API_KEY}&query={query}"
+    response = requests.get(url).json()
+    
+    return jsonify(response)
 
-# OVO MORA DA BUDE NA SAMOM KRAJU FAJLA
+@app.route('/stream')
+def get_stream():
+    tmdb_id = request.args.get('id')
+    media_type = request.args.get('type', 'movie')
+    video_url = f"https://vidsrc.to{media_type}/{tmdb_id}"
+    return jsonify({"url": video_url})
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
+    app.run()
